@@ -84,114 +84,203 @@ def licheck(dir):
 
 #################   아래에서 collection, document 이름 변경 ##########################
 
+# 바코드 인식할때 바코드 번호에 따라서 db 저장문이 달라진다 
+number = 3
+if number == 1:
+    def uplist(c_name):
+        doc_ref = db.collection(u'user').document(u'book1')
+        doc_ref.update({    
+            u'next' : c_name
+        })
     
-###############   파이어베이스에 현재(새로운) list 넣기     ############################
-def uplist(c_name):
-    doc_ref = db.collection(u'user').document(u'test2')
-    doc_ref.update({    
-        u'next' : c_name
-    })
-####################################################################################
+    def litoday():
+        doc_ref = db.collection(u'user').document(u'book1')
+        doc = doc_ref.get()
+        # print(doc.get('today'))
+        today = doc.get('today')
+        return today
 
-    
-###############   today list 다운받기     ########################################
-def litoday():
-    doc_ref = db.collection(u'user').document(u'test2')
-    doc = doc_ref.get()
-    # print(doc.get('today'))
-    today = doc.get('today')
-    return today
-####################################################################################
+    def linext():
+        doc_ref = db.collection(u'user').document(u'book1')
+        doc = doc_ref.get()
+        # print(doc.get('next'))
+        next = doc.get('next')
+        return next
 
-
-###############   next list 다운받기     ########################################
-def linext():
-    doc_ref = db.collection(u'user').document(u'test2')
-    doc = doc_ref.get()
-    # print(doc.get('next'))
-    next = doc.get('next')
-    return next
-####################################################################################
-
-
-###############   이전 list와 현재 list를 비교해서 안내문구 업로드  ############################
-def fincheck(a, b):
-    la = len(a)
-    lb = len(b)
-    if la == lb:
-        ch = bmk_check.icheck(a, b)
-        if ch == True:
-            t1 = '정상입니다. 반납해주세요.'
-            doc_ref = db.collection(u'user').document(u'test')
-            doc_ref.update({    
-                u'txt2' : t1
-            })
-        else:
+    def fincheck(a, b):
+        la = len(a)
+        lb = len(b)
+        if la == lb:
+            ch = bmk_check.icheck(a, b)
+            if ch == True:
+                t1 = '정상입니다. 반납해주세요.'
+                doc_ref = db.collection(u'user').document(u'book1')
+                doc_ref.update({    
+                    u'txt2' : t1
+                })
+            else:
+                t2 = '창구를 확인해주세요.'
+                doc_ref = db.collection(u'user').document(u'book1')
+                doc_ref.update({    
+                    u'txt2' : t2
+                })
+        elif la < lb:
             t2 = '창구를 확인해주세요.'
-            doc_ref = db.collection(u'user').document(u'test')
+            doc_ref = db.collection(u'user').document(u'book1')
             doc_ref.update({    
                 u'txt2' : t2
             })
-    elif la < lb:
-        t2 = '창구를 확인해주세요.'
-        doc_ref = db.collection(u'user').document(u'test')
+        else:
+            t3= '오류입니다. 직원을 불러주세요.'
+            doc_ref = db.collection(u'user').document(u'book1')
+            doc_ref.update({   
+                u'txt2' : t3
+            })
+    
+    bucket = storage.bucket()
+    fbdown(bucket)
+
+    dir = os.path.isfile(file_path1)
+    print(dir)  # True                  #경로에 파일이 있는 지 확인
+    c_name = licheck(dir)
+
+    db = firestore.client()
+    uplist(c_name)
+    print(c_name)
+
+    today = litoday()
+    next = linext()
+    fincheck(today, next)               #이전 list와 현재 list 비교해서 안내문구 업로드
+
+if number == 2:
+    def uplist(c_name):
+        doc_ref = db.collection(u'user').document(u'book2')
         doc_ref.update({    
-            u'txt2' : t2
+            u'next' : c_name
         })
-    else:
-        t3= '오류입니다. 직원을 불러주세요.'
-        doc_ref = db.collection(u'user').document(u'test')
-        doc_ref.update({   
-            u'txt2' : t3
+
+    def litoday():
+        doc_ref = db.collection(u'user').document(u'book2')
+        doc = doc_ref.get()
+        # print(doc.get('today'))
+        today = doc.get('today')
+        return today
+
+    def linext():
+        doc_ref = db.collection(u'user').document(u'book2')
+        doc = doc_ref.get()
+        # print(doc.get('next'))
+        next = doc.get('next')
+        return next
+
+    def fincheck(a, b):
+        la = len(a)
+        lb = len(b)
+        if la == lb:
+            ch = bmk_check.icheck(a, b)
+            if ch == True:
+                t1 = '정상입니다. 반납해주세요.'
+                doc_ref = db.collection(u'user').document(u'book2')
+                doc_ref.update({    
+                    u'txt2' : t1
+                })
+            else:
+                t2 = '창구를 확인해주세요.'
+                doc_ref = db.collection(u'user').document(u'book2')
+                doc_ref.update({    
+                    u'txt2' : t2
+                })
+        elif la < lb:
+            t2 = '창구를 확인해주세요.'
+            doc_ref = db.collection(u'user').document(u'book2')
+            doc_ref.update({    
+                u'txt2' : t2
+            })
+        else:
+            t3= '오류입니다. 직원을 불러주세요.'
+            doc_ref = db.collection(u'user').document(u'book2')
+            doc_ref.update({   
+                u'txt2' : t3
+            })
+   
+    bucket = storage.bucket()
+    fbdown(bucket)
+    dir = os.path.isfile(file_path1)
+    print(dir)  # True                               #경로에 파일이 있는 지 확인
+    c_name = licheck(dir)
+
+    db = firestore.client()
+    uplist(c_name)
+    print(c_name)
+
+    today = litoday()
+    next = linext()
+
+    fincheck(today, next)     #이전 list와 현재 list 비교해서 안내문구 업로드
+
+if number == 3:
+    def uplist(c_name):
+        doc_ref = db.collection(u'user').document(u'book3')
+        doc_ref.update({    
+            u'next' : c_name
         })
-####################################################################################
-####################################################################################
-####################################################################################
 
-        
+    def litoday():
+        doc_ref = db.collection(u'user').document(u'book3')
+        doc = doc_ref.get()
+        # print(doc.get('today'))
+        today = doc.get('today')
+        return today
 
-##############    firebase 이미지 다운로드  ###########################################
-###########    Android에서 찍어서 -> firebase 올려서 -> python으로 다운로드 ###########
+    def linext():
+        doc_ref = db.collection(u'user').document(u'book3')
+        doc = doc_ref.get()
+        # print(doc.get('next'))
+        next = doc.get('next')
+        return next
 
-bucket = storage.bucket()
-fbdown(bucket)
+    def fincheck(a, b):
+        la = len(a)
+        lb = len(b)
+        if la == lb:
+            ch = bmk_check.icheck(a, b)
+            if ch == True:
+                t1 = '정상입니다. 반납해주세요.'
+                doc_ref = db.collection(u'user').document(u'book3')
+                doc_ref.update({    
+                    u'txt2' : t1
+                })
+            else:
+                t2 = '창구를 확인해주세요.'
+                doc_ref = db.collection(u'user').document(u'book3')
+                doc_ref.update({    
+                    u'txt2' : t2
+                })
+        elif la < lb:
+            t2 = '창구를 확인해주세요.'
+            doc_ref = db.collection(u'user').document(u'book3')
+            doc_ref.update({    
+                u'txt2' : t2
+            })
+        else:
+            t3= '오류입니다. 직원을 불러주세요.'
+            doc_ref = db.collection(u'user').document(u'book3')
+            doc_ref.update({   
+                u'txt2' : t3
+            })
+   
+    bucket = storage.bucket()
+    fbdown(bucket)
+    dir = os.path.isfile(file_path1)
+    print(dir)  # True                               #경로에 파일이 있는 지 확인
+    c_name = licheck(dir)
 
-#############  fireabase 이미지 다운로드 #########################################
+    db = firestore.client()
+    uplist(c_name)
+    print(c_name)
 
+    today = litoday()
+    next = linext()
 
-
-###########  경로 및  파일 이미지 확인 디텍팅 실시  ################################
-
-#file_path = "C:\\Users\\h\\Desktop\\yolov5\\yolov5\\img\\2.png"
-#file_path2 = "C:\\Users\\h\\Desktop\\yolov5\\yolov5\\img\\3.png"
-dir = os.path.isfile(file_path1)
-print(dir)  # True                               #경로에 파일이 있는 지 확인
-c_name = licheck(dir)
-
-######################  경로 및  파일 이미지 확인 디텍팅 실시 ###########################
-
-
-
-#img = cv2.imread("C:/Users/HUSTAR09/Desktop/book/try/images/img001.jpg",cv2.IMREAD_UNCHANGED)
-
-
-
-####### 파이어베이스에 c_name 즉 새로운 리스트 넣기 ######################################
-
-db = firestore.client()
-uplist(c_name)
-print(c_name)
-
-##########################################################################################
-
-
-
-########## 파이어 베이스에 넣은 리스트 불러오기 ###########################################
-
-today = litoday()
-next = linext()
-
-fincheck(today, next)     #이전 list와 현재 list 비교해서 안내문구 업로드
-
-################# 파이어 베이스에 넣은 리스트 불러오기 #########################################
+    fincheck(today, next)     #이전 list와 현재 list 비교해서 안내문구 업로드
 

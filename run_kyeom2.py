@@ -9,7 +9,6 @@ from requests import request
 import requests as req
 import urllib.request
 from PIL import Image
-from bmk_check import litoday, uplist
 import yolo_detector
 import os
 from tokenize import Name
@@ -155,6 +154,7 @@ def fincheck(a, b):
 ###########    Android에서 찍어서 -> firebase 올려서 -> python으로 다운로드 ###########
 
 bucket = storage.bucket()
+fbdown(bucket)
 
 #############  fireabase 이미지 다운로드 #########################################
 
@@ -166,7 +166,7 @@ bucket = storage.bucket()
 #file_path2 = "C:\\Users\\h\\Desktop\\yolov5\\yolov5\\img\\3.png"
 dir = os.path.isfile(file_path1)
 print(dir)  # True                               #경로에 파일이 있는 지 확인
-c_name = bmk_check.licheck(dir)
+c_name = licheck(dir)
 
 ######################  경로 및  파일 이미지 확인 디텍팅 실시 ###########################
 
@@ -179,7 +179,8 @@ c_name = bmk_check.licheck(dir)
 ####### 파이어베이스에 c_name 즉 새로운 리스트 넣기 ######################################
 
 db = firestore.client()
-bmk_check.uplist(c_name)
+uplist(c_name)
+print(c_name)
 
 ##########################################################################################
 
@@ -187,16 +188,10 @@ bmk_check.uplist(c_name)
 
 ########## 파이어 베이스에 넣은 리스트 불러오기 ###########################################
 
-today = bmk_check.litoday()
-next = bmk_check.linext()
+today = litoday()
+next = linext()
 
-bmk_check.fincheck(today, next)     #이전 list와 현재 list 비교해서 안내문구 업로드
+fincheck(today, next)     #이전 list와 현재 list 비교해서 안내문구 업로드
 
 ################# 파이어 베이스에 넣은 리스트 불러오기 #########################################
 
-
-
-
-###  각 해당하는 기능들을 함수로 구현해서 메인에서 함수선언으로 돌아가게 하고싶어요 ㅠㅠ.... ###     
-##   수겸아 부탁해...
-#  
